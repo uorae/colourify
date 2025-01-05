@@ -1,3 +1,2 @@
 # song-recs
-a music recommender based on a colour:
-outputs a message based on the colour and then song recs.
+a music recommender that recommends songs based on a colour
