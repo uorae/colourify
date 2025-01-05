@@ -1,2 +1,2 @@
-# song-recs
-a music recommender that recommends songs based on a colour
+# colourify
+a music program using spotify API that recommends songs based on a colour
