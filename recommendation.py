@@ -23,9 +23,7 @@ def fetch_recs():
   response = requests.get(url, headers=headers, params=params)
 
   # Check for successful request
-  if response.status_code == 200:
-      recommendations = response.json()['tracks']
-      print(recommendations)
-  else:
-      print("Error fetching recommendations:", response.status_code)
-      print(response.json())
+  if response.status_code != 200:
+    raise Exception("Error fetching recommendations")
+
+  return response.json()['tracks']
