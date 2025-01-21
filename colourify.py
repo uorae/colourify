@@ -1,18 +1,20 @@
 import inquirer
+import recommendation
 
-def colour_to_music(characteristics):
+def colour_to_music(colour):
 	colour_map = {
-		'red': {'energy': 0.8, 'valence': 0.8, 'tempo': 120, 'genres': ['pop', 'rock', 'dance']},
-		'blue': {'energy': 0.3, 'valence': 0.4, 'tempo': 60, 'genres': ['jazz', 'acoustic', 'classical']},
-		'yellow': {'energy': 0.7, 'valence': 0.9, 'tempo': 110, 'genres': ['indie', 'dance', 'electronic']},
-		'green': {'energy': 0.5, 'valence': 0.6, 'tempo': 80, 'genres': ['ambient', 'folk', 'nature']},
-		'purple': {'energy': 0.6, 'valence': 0.5, 'tempo': 100, 'genres': ['alternative', 'electronic']},
-		'black': {'energy': 0.2, 'valence': 0.3, 'tempo': 70, 'genres': ['ambient', 'classical', 'indie']},
-		'white': {'energy': 0.3, 'valence': 0.5, 'tempo': 80, 'genres': ['ambient', 'classical', 'acoustic']},
+		'red': {'genres': ['rock', 'pop', 'dance']},
+		'orange': {'genres': ['reggae', 'soul', 'acoustic']},
+		'yellow': {'genres': ['indie', 'folk', 'pop']},
+		'green': {'genres': ['country', 'folk', 'ambient']},
+		'blue': {'genres': ['blues', 'jazz', 'classical']},
+		'purple': {'genres': ['lo-fi', 'dream pop', 'shoegaze']},
+		'black': {'genres': ['metal', 'alternative emo', 'visual kei']},
+		'white': {'genres': ['ambient', 'classical', 'acoustic']},
 	}
 	
 	# Default to a neutral value if color not found
-	return colour_map.get(characteristics.lower(), colour_map['black'])
+	return colour_map.get(colour.lower(), colour_map['white'])
 
 
 # welcome
@@ -26,7 +28,14 @@ questions = [
 ]
 
 answer = inquirer.prompt(questions)
+genres = colour_to_music(answer['colour'])
 
+track_json = recommendation.fetch_recs(genres['genres'])
+for track_info in track_json['items']:
+	title = track_info['name']
+	artist = track_info['artists'][0]['name']
+
+	print(title + ' by ' + artist)
 # match answer["colour"]:
 #     case "Red":
 #         action-1

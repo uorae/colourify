@@ -3,7 +3,7 @@ import auth
 
 ACCESS_TOKEN = auth.get_access_token()
 
-def fetch_recs():
+def fetch_recs(genres):
   # Spotify Search API Endpoint
   url = 'https://api.spotify.com/v1/search'
 
@@ -12,9 +12,10 @@ def fetch_recs():
     'Authorization': f'Bearer {ACCESS_TOKEN}'
   }
 
+  print((genres))
   # Define the parameters for the recommendations
   params = {
-    #'q': f'genre:{}',
+    'q': f"genre:{' OR '.join(genres)}",
     'type': 'track',
     'limit': 20, # Number of recommendations to fetch
   }
