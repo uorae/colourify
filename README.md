@@ -1,6 +1,6 @@
-## colourify
+# colourify
 a music program using spotify API that recommends songs based on a colour
 
-# features
+## features
 8 colour options mapped to an associated music genre
 50 song recommendations fetched via Spotify API's search endpoint and sorted by popularity and latest releases
