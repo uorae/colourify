@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 import auth
 
 ACCESS_TOKEN = auth.get_access_token()
@@ -12,12 +13,13 @@ def fetch_recs(genres):
     'Authorization': f'Bearer {ACCESS_TOKEN}'
   }
 
-  print((genres))
-  # Define the parameters for the recommendations
+  query = f"genre:{' genre:'.join(genres)}"
+
+  # Define the parameters for the recommendations 
   params = {
-    'q': f"genre:{' OR '.join(genres)}",
+    'q': query,
     'type': 'track',
-    'limit': 20, # Number of recommendations to fetch
+    'limit': 50, # Number of recommendations to fetch
   }
 
   # Send GET request to Spotify Recommendations API
@@ -28,3 +30,26 @@ def fetch_recs(genres):
     raise Exception("Error fetching recommendations")
 
   return response.json()['tracks']
+
+# # sort by popularity and release date
+def sort_recs(recommmended_tracks):
+  # prioritising latest releases:
+  for track in recommmended_tracks.values():
+
+    # accounting for missing date values
+    release_date = (track['Release Date'])
+    if len(release_date) == 4:  # It's only a year (e.g., "2020")
+      release_date = datetime.strptime(release_date, "%Y")
+    elif len(release_date) == 7:  # It's only a year and month (e.g., "2020-01")
+      release_date = datetime.strptime(release_date, "%Y-%m")
+    else:
+      # Otherwise, the date is in full (e.g., "2023-06-15")
+      release_date = datetime.strptime(release_date, "%Y-%m-%d")
+
+    # Calculate the time span between release date and today's date
+    since_release = datetime.today() - release_date
+
+    # Calculate the weighted popularity score based on time span (e.g., more recent releases have higher weight)
+    track['Popularity'] = track['Popularity'] * (1 / (since_release.days + 1))
+
+  return dict(sorted(recommmended_tracks.items(), key=lambda item: item[1]['Popularity'], reverse=True))

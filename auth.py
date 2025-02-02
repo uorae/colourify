@@ -7,6 +7,7 @@ def get_access_token():
     CLIENT_SECRET = 'e661f2687bbc433faf10e333163f3b03'
 
     # Base64 encode the client ID and client secret
+    # Authorization: Basic <base64 encoded client_id:client_secret>
     client_credentials = f"{CLIENT_ID}:{CLIENT_SECRET}"
     client_credentials_base64 = base64.b64encode(client_credentials.encode())
 
